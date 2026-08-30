@@ -1,0 +1,163 @@
+origin-finder Skill Package
+============================
+
+Package Contents:
+─────────────────
+
+📄 INSTALL.md (START HERE)
+   Quick 3-step installation guide for all platforms
+   - macOS, Windows, Linux paths
+   - Verification steps
+   - Troubleshooting
+
+📄 README.md
+   Comprehensive documentation
+   - What the skill does
+   - Usage examples
+   - Tips for best results
+   - Troubleshooting guide
+
+📄 SKILL.md
+   The actual skill file (loaded by Claude)
+   - Research workflow (3 phases)
+   - Research sources (ranked by reliability)
+   - Output formats and templates
+   - Pro tips and email-finding guide
+   - Claude Code integration examples
+   - Research checklist
+
+📁 scripts/
+   Automation tools for research
+
+   github_profiler.py
+   ├─ Extract top contributors from any GitHub repo
+   ├─ Build profiles from GitHub API
+   ├─ Export as Markdown or JSON
+   ├─ Usage: python3 github_profiler.py owner/repo
+   └─ Optional Python 3.7+, requires 'requests' library
+
+📁 references/
+   Detailed guides for specific research areas
+
+   finding-emails.md
+   ├─ 10+ techniques to find email addresses
+   ├─ GitHub commit history methods
+   ├─ Company domain patterns
+   ├─ Social media sources
+   ├─ Ethical considerations
+   └─ Real-world examples
+
+   github-advanced-search.md
+   ├─ Advanced GitHub search syntax
+   ├─ User search operators
+   ├─ Repository search filters
+   ├─ Commit & code search
+   ├─ Issue & PR search
+   ├─ Real-world workflow examples
+   └─ git CLI commands for local analysis
+
+   social-media-signals.md
+   ├─ Reading LinkedIn profiles
+   ├─ Understanding Twitter/X patterns
+   ├─ Evaluating influence metrics
+   ├─ Assessing credibility signals
+   └─ Mapping professional networks
+
+
+Quick Start
+───────────
+
+1. Copy origin-finder/ to your Claude skills folder:
+   - macOS: ~/Library/Application Support/Claude/skills/
+   - Windows: %AppData%\Claude\skills\
+   - Linux: ~/.config/Claude/skills/
+
+2. Restart Claude completely
+
+3. Try: "I want to learn about [tool]. Can you help me find who created it?"
+
+
+File Structure
+──────────────
+
+origin-finder/
+├── INSTALL.md                 ← Installation (read first)
+├── README.md                  ← Full documentation
+├── SKILL.md                   ← Main skill (Claude reads this)
+├── MANIFEST.txt               ← This file
+├── scripts/
+│   └── github_profiler.py     ← GitHub automation script
+└── references/
+    ├── finding-emails.md      ← Email discovery guide
+    ├── github-advanced-search.md  ← GitHub search reference
+    └── social-media-signals.md    ← Social profile reading
+
+
+Requirements
+─────────────
+
+- Claude Desktop or Claude.ai
+- No special requirements for basic use
+- Optional: Python 3.7+ for automated GitHub profiling (requests library)
+
+
+Key Features
+────────────
+
+✓ Structured 3-phase research workflow
+✓ Ranked research sources (most to least reliable)
+✓ Email finding techniques (10+ methods)
+✓ GitHub contribution analysis
+✓ Professional background discovery
+✓ Social media account mapping
+✓ Contact information location
+✓ Project governance assessment
+✓ Automated Python scripts (optional)
+✓ Complete reference guides
+
+
+Use Cases
+──────────
+
+✓ Before learning a new framework → Understand its creators
+✓ Evaluating tools → Assess maintainer credibility  
+✓ Understanding origins → Discover founding story
+✓ Professional networking → Connect with domain experts
+✓ Due diligence → Vet open-source project teams
+✓ Finding collaborators → Identify influential contributors
+
+
+Version
+────────
+
+origin-finder v1.0
+Created: 2026
+Platform: Claude (all versions)
+
+
+Support
+────────
+
+1. Check INSTALL.md for installation issues
+2. See README.md for usage guidance
+3. Reference guides in /references/ for specific techniques
+4. Try automation script: scripts/github_profiler.py --help
+
+
+License & Ethics
+─────────────────
+
+This skill respects privacy and ethical research practices:
+- Uses only public information
+- No scraping or unauthorized access
+- Respects "no contact info" signals
+- Assumes data collected for professional use
+- Never for spam, harassment, or unauthorized contact
+
+See README.md for detailed ethical guidelines.
+
+
+────────────────────────────────────────────────────────
+Ready to discover who's behind your favorite technologies?
+Start with INSTALL.md → README.md → Use in Claude
+────────────────────────────────────────────────────────
