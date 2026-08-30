@@ -17,6 +17,7 @@ for a specific case.
 
 ## Fundamentals
 
+- Discovering all topics and concepts of X and even skim their names
 - Basic parts of the document/reference
 - Explore video content (optional)
 - Clone and analyze overall related project/source codes if they exist
