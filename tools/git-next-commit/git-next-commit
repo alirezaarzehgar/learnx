@@ -1,0 +1,107 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+usage() {
+  cat <<'EOF'
+Usage: git-next-commit [N] [-b|--branch BRANCH]
+
+Move forward N commits (default: 1) along BRANCH, starting from the
+current commit, and check out the resulting commit.
+
+Options:
+  -b, --branch BRANCH   Branch to walk along.
+                         Default: current branch, or the remote's
+                         default branch if in detached HEAD.
+  -h, --help             Show this help.
+
+Examples:
+  git-next-commit             # move 1 commit forward on current branch
+  git-next-commit 3           # move 3 commits forward
+  git-next-commit -b develop  # move 1 commit forward along 'develop'
+  git-next-commit 5 -b develop
+EOF
+}
+
+N=1
+BRANCH="${BRANCH:-}"
+
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    -b|--branch)
+      [[ $# -ge 2 ]] || { echo "Error: --branch requires a value" >&2; exit 1; }
+      BRANCH="$2"
+      shift 2
+      ;;
+    -h|--help)
+      usage
+      exit 0
+      ;;
+    -*)
+      echo "Unknown option: $1" >&2
+      usage >&2
+      exit 1
+      ;;
+    *)
+      if ! [[ "$1" =~ ^[0-9]+$ ]] || [[ "$1" -eq 0 ]]; then
+        echo "Error: N must be a positive integer, got '$1'" >&2
+        exit 1
+      fi
+      N="$1"
+      shift
+      ;;
+  esac
+done
+
+git rev-parse --is-inside-work-tree >/dev/null 2>&1 || {
+  echo "Error: not inside a git repository" >&2
+  exit 1
+}
+
+if ! git diff --quiet || ! git diff --cached --quiet; then
+  echo "Error: you have uncommitted changes. Commit, stash, or discard them first." >&2
+  exit 1
+fi
+
+# Determine branch to walk along
+if [[ -z "$BRANCH" ]]; then
+  CURRENT_BRANCH=$(git symbolic-ref --quiet --short HEAD || true)
+  if [[ -n "$CURRENT_BRANCH" ]]; then
+    BRANCH="$CURRENT_BRANCH"
+  else
+    BRANCH=$(git symbolic-ref --quiet --short refs/remotes/origin/HEAD 2>/dev/null | sed 's#^origin/##') || true
+    if [[ -z "$BRANCH" ]]; then
+      echo "Error: detached HEAD and no default branch found; pass -b/--branch explicitly." >&2
+      exit 1
+    fi
+    echo "Detached HEAD detected; using default branch '$BRANCH'." >&2
+  fi
+fi
+
+git rev-parse --verify --quiet "$BRANCH" >/dev/null || {
+  echo "Error: branch '$BRANCH' does not exist." >&2
+  exit 1
+}
+
+CURRENT_COMMIT=$(git rev-parse --short HEAD)
+
+if ! git merge-base --is-ancestor "$CURRENT_COMMIT" "$BRANCH"; then
+  echo "Error: current commit is not an ancestor of '$BRANCH'." >&2
+  exit 1
+fi
+
+mapfile -t COMMITS < <(git log --format='%h' "${CURRENT_COMMIT}..${BRANCH}" --reverse)
+
+if [[ ${#COMMITS[@]} -eq 0 ]]; then
+  echo "Already at the tip of '$BRANCH'; no next commit." >&2
+  exit 1
+fi
+
+if (( N > ${#COMMITS[@]} )); then
+  echo "Only ${#COMMITS[@]} commit(s) ahead on '$BRANCH'; moving to the tip instead of $N forward." >&2
+  N=${#COMMITS[@]}
+fi
+
+TARGET_COMMIT="${COMMITS[$((N-1))]}"
+
+echo "Checking out ${TARGET_COMMIT} (${N} commit(s) forward on ${BRANCH})"
+git checkout "$TARGET_COMMIT"
