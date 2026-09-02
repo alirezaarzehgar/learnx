@@ -143,3 +143,12 @@ INFO {"server_id":"a4dcfe50969734eaaad2cfb1c71ce47c","version":"go 0.1.0.alpha.1
 PUB greeting 13
 Hello, World
 ```
+
+## 2026-09-02
+
+Today I'm understand the nats-server in the fd4612fab021659cd42be70d3c0938d620a09b73 commit.
+I have a big switch case on `(c *client) parse(buf []byte) error` and I found it is Finite State Machine. Before learning
+about its model I was shocked that why this method used and why it is awkward as is. But it is a zero-copy mechanism and
+is suitable for parsing message protocols in queue.
+
+I learned and understand core business logic of it and then I should play with it.
